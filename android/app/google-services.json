@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "90647274675",
+    "project_id": "internship-53f31",
+    "storage_bucket": "internship-53f31.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:90647274675:android:d72f2cd34a9f1614de7cc6",
+        "android_client_info": {
+          "package_name": "com.internship.calculator_1_3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "90647274675-i47tig4j0ugr4qj4i41umcc4rq6vbe8o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9-u7eMAgHJhKWuiHwk-22AH8809SdQF8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "90647274675-i47tig4j0ugr4qj4i41umcc4rq6vbe8o.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "90647274675-i5olr0vqgclf35q6dq6j3f13ditpupos.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.internship.calculator13"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
