@@ -29,7 +29,7 @@ class DatabaseHelper {
           description TEXT,
           createdDateTime TEXT,
           dueDateTime TEXT,
-          priority INTEGER DEFAULT 10
+          priority INTEGER DEFAULT 10,
           completed INTEGER DEFAULT 0
         )
         ''',
@@ -38,14 +38,16 @@ class DatabaseHelper {
     );
   }
 
-  Future<int> addTodo(String title, String? description, String dateTime) async {
+  Future<int> addTodo(String title, String? description, int priority, String dueDateTime,String dateTime) async {
     final db = await database;
     return await db.insert(
       'todos',
       {
         'title': title,
         'description': description,
-        'dateTime': dateTime,
+        'priority': priority,
+        'dueDateTime': dueDateTime,
+        'createdDateTime': dateTime,
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
@@ -60,14 +62,16 @@ class DatabaseHelper {
     );
   }
 
-  Future<int> updateTodo(int id, String title, String? description, String dateTime) async {
+  Future<int> updateTodo(int id, String title, String? description, int priority, String dueDateTime, String dateTime) async {
     final db = await database;
     return await db.update(
       'todos',
       {
         'title': title,
         'description': description,
-        'dateTime': dateTime,
+        'priority': priority,
+        'dueDateTime': dueDateTime,
+        'createdDateTime': dateTime,
       },
       where: 'id = ?',
       whereArgs: [id],
@@ -86,6 +90,9 @@ class DatabaseHelper {
 
   Future<List<Map<String, dynamic>>> fetchTodos() async {
     final db = await database;
-    return await db.query('todos');
+    return await db.query(
+      'todos',
+      orderBy: 'priority ASC',
+    );
   }
 }
