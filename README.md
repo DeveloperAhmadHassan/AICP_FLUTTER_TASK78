@@ -1,6 +1,6 @@
-# calculator_1_3
+# AICP Internship Tasks
 
-Task 1.3 (Week 1, Task 3) of AICP Internship
+All Tasks of AICP (Week 1 - Week 9)
 
 ## Getting Started
 
@@ -14,5 +14,6 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
-"# AICP_FLUTTER_TASK1" 
-"# AICP_FLUTTER_TASK2" 
+# AICP_FLUTTER_TASK1
+# AICP_FLUTTER_TASK
+"# AICP_FLUTTER_TASK3" 
