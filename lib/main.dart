@@ -5,7 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-import 'Task5/ECommerceApp.dart';
+import 'Task6/WeatherApp.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const ECommerceScreen(),
+      home: const WeatherScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
