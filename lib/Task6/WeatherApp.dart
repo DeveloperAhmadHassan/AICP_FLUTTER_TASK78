@@ -13,11 +13,12 @@ class WeatherScreen extends StatefulWidget {
 
 class _WeatherScreenState extends State<WeatherScreen> {
   late Map<dynamic, dynamic> _weather = {};
-  late Map<String, String> _additionalWeatherData = {};
-  late Map<String, String> _additionalWeatherDataTitles = {};
+  late final Map<String, String> _additionalWeatherData = {};
+  late final Map<String, String> _additionalWeatherDataTitles = {};
   final WeatherService _weatherService = WeatherService();
   bool _isLoading = true;
   bool _isSearching = false;
+  bool _error = false;
   String _searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
 
@@ -25,7 +26,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
   void initState() {
     super.initState();
     _fetchWeather();
-    // _determinePosition();
   }
 
   Future<Position> _determinePosition() async {
@@ -55,26 +55,28 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
   void _fetchWeather({String city = ""}) async {
     try {
-      print("City:");
+
       if(city.isEmpty){
         Position position = await _determinePosition();
         List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
         Placemark placemark = placemarks[0];
         city = placemark.locality ?? 'Unknown';
+        print("City: $city");
       }
-
-      print("City: $city");
-
       Map<dynamic, dynamic> weather = await _weatherService.fetchWeather(city);
-      print(weather);
       setState(() {
         _weather = weather;
+        print(_weather);
         _addAdditionalWeatherData();
         _isLoading = false;
+        _error = false;
       });
     } catch (e) {
       print('Error fetching weather: $e');
-      _isLoading = false;
+      setState(() {
+        _isLoading = false;
+        _error = true;
+      });
     }
   }
 
@@ -113,14 +115,19 @@ class _WeatherScreenState extends State<WeatherScreen> {
   void _addAdditionalWeatherData(){
     _additionalWeatherData["uv"] = _weather["current"]["uv"].toString();
     _additionalWeatherDataTitles["uv"] = "UV Index";
+
     _additionalWeatherData["humidity"] = _weather["current"]["humidity"].toString();
     _additionalWeatherDataTitles["humidity"] = "Humidity";
+
     _additionalWeatherData["wind_kph"] = _weather["current"]["wind_kph"].toString();
     _additionalWeatherDataTitles["wind_kph"] = "Wind";
+
     _additionalWeatherData["dewpoint_c"] = _weather["current"]["dewpoint_c"].toString();
     _additionalWeatherDataTitles["dewpoint_c"] = "Dew Point";
+
     _additionalWeatherData["pressure_mb"] = _weather["current"]["pressure_mb"].toString();
     _additionalWeatherDataTitles["pressure_mb"] = "Pressure";
+
     _additionalWeatherData["vis_km"] = _weather["current"]["vis_km"].toString();
     _additionalWeatherDataTitles["vis_km"] = "Visibility";
   }
@@ -133,13 +140,13 @@ class _WeatherScreenState extends State<WeatherScreen> {
             ? TextField(
           controller: _searchController,
           autofocus: true,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             hintText: 'Enter city name',
             border: InputBorder.none,
           ),
           onSubmitted: _onSearchSubmitted,
         )
-            : Text('Weather Forecast'),
+            : const Text('Weather Forecast'),
         actions: [
           IconButton(
             icon: Icon(_isSearching ? Icons.close : Icons.search),
@@ -148,10 +155,24 @@ class _WeatherScreenState extends State<WeatherScreen> {
         ],
       ),
       body: _isLoading
-          ? Center(
-        child: CircularProgressIndicator(),
-      )
-          : CustomScrollView(
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : _error ? const Center(
+            child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Text(
+            "Location Not Found",
+            style: TextStyle(
+              color: Colors.red,
+              fontSize: 26.0,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
+                    ),
+                  ),
+          ) :
+      CustomScrollView(
         slivers: [
           SliverPadding(
             padding: const EdgeInsets.all(13.0),
@@ -307,24 +328,22 @@ class _WeatherScreenState extends State<WeatherScreen> {
   Widget _hourlyCard(String time, String temp, String imgSrc){
     return Padding(
       padding: const EdgeInsets.only(right: 20.0),
-      child: Container(
-        child: Column(
-          children: [
-            Text("$time", style: TextStyle(
-                color: Colors.blueGrey,
-                fontSize: 16
-            )),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-              child: Image.network("https:$imgSrc", height: 55, width: 55),
-            ),
-            Text("$temp", style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.w600
-            ))
-          ],
-        ),
+      child: Column(
+        children: [
+          Text(time, style: const TextStyle(
+              color: Colors.blueGrey,
+              fontSize: 16
+          )),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+            child: Image.network("https:$imgSrc", height: 55, width: 55),
+          ),
+          Text("$temp", style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.w600
+          ))
+        ],
       ),
     );
   }
